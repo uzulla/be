@@ -1,11 +1,6 @@
 {
   "name": "be",
   "private": true,
-  "scripts": {
-    "dev": "wrangler dev",
-    "deploy": "wrangler deploy",
-    "test": "node test/e2e.mjs"
-  },
   "devDependencies": {
     "wrangler": "^4.165.0"
   }

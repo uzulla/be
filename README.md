@@ -22,25 +22,59 @@
 
 ## 開発
 
+Node とタスクは [mise](https://mise.jdx.dev/) で管理している。
+
 ```sh
-npm install
-npm run dev      # http://localhost:8787
-npm test         # dev サーバー起動中に実行する
-npm run deploy   # 初回は npx wrangler login が必要
+mise trust && mise install   # 初回のみ。Node を用意する
+mise run install             # 依存パッケージ (wrangler) を入れる
+mise run dev                 # http://localhost:8787
+mise run test                # dev サーバー起動中に実行する
 ```
 
-`npm test` はヘッドレス Chrome を起動して E2E チェックを行う。環境変数で変更できる。
+`mise run test` はヘッドレス Chrome を起動して E2E チェックを行う。環境変数で変更できる。
 
 | 変数 | 既定値 |
 | --- | --- |
 | `CHROME` | `/Applications/Google Chrome.app/Contents/MacOS/Google Chrome` |
 | `BASE` | `http://localhost:8787` |
 
+## デプロイ
+
+Cloudflare アカウントが必要。初回は `wrangler login` でログインする。
+
+```sh
+mise run deploy   # https://be.<サブドメイン>.workers.dev に公開される
+```
+
+### 独自ドメインで公開する
+
+`wrangler.jsonc` をコピーして `wrangler.local.jsonc` を作り、`routes` を追加する。
+このファイルは git 管理外(`.gitignore` 済み)。ドメインは同じ Cloudflare アカウントのゾーンにある必要がある。
+
+```jsonc
+{
+  "name": "be",
+  "compatibility_date": "2026-11-01",
+  "routes": [{ "pattern": "be.example.com", "custom_domain": true }],
+  "assets": {
+    "directory": "./public",
+    "not_found_handling": "single-page-application"
+  }
+}
+```
+
+```sh
+mise run deploy:prod   # wrangler.local.jsonc の設定でデプロイする
+```
+
+DNS レコードと証明書はデプロイ時に自動で作られる。
+
 ## 構成
 
 ```
 public/index.html   アプリ本体(HTML / CSS / JS をインライン)
 wrangler.jsonc      Workers 設定。静的アセットのみ、/<uuid> は index.html にフォールバック
+mise.toml           Node のバージョンとタスク定義
 test/e2e.mjs        E2E テスト(Chrome DevTools Protocol を直接使用)
 ```
 

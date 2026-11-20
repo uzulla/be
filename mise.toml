@@ -1,0 +1,25 @@
+[tools]
+node = "26"
+
+[env]
+_.path = ["node_modules/.bin"]
+
+[tasks.install]
+description = "依存パッケージをインストールする"
+run = "npm install"
+
+[tasks.dev]
+description = "ローカルで起動する (http://localhost:8787)"
+run = "wrangler dev"
+
+[tasks.test]
+description = "E2E テスト (dev サーバー起動中に実行する)"
+run = "node test/e2e.mjs"
+
+[tasks.deploy]
+description = "wrangler.jsonc の設定でデプロイする (workers.dev)"
+run = "wrangler deploy"
+
+[tasks."deploy:prod"]
+description = "wrangler.local.jsonc の設定でデプロイする (独自ドメインなど)"
+run = "wrangler deploy -c wrangler.local.jsonc"
