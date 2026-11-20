@@ -1,0 +1,10 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "be",
+  "compatibility_date": "2026-11-01",
+  // サーバーコードなし。静的アセットのみを配信し、/<uuid> は index.html にフォールバックする
+  "assets": {
+    "directory": "./public",
+    "not_found_handling": "single-page-application"
+  }
+}
