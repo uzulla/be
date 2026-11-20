@@ -9,8 +9,8 @@ description = "依存パッケージをインストールする"
 run = "npm install"
 
 [tasks.dev]
-description = "ローカルで起動する (http://localhost:8787)"
-run = "wrangler dev"
+description = "ローカルで起動する (http://localhost:8787)。テストを繰り返せるよう、書きこみの回数制限は切る"
+run = "wrangler dev --var RATE_LIMIT:off"
 
 [tasks.test]
 description = "E2E テスト (dev サーバー起動中に実行する)"
